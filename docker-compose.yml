@@ -1,0 +1,30 @@
+version: '3'
+services:
+  likes_services:
+    image: creativitykills/nginx-php-server
+    container_name: likes
+    ports:
+    - "44679:80"
+    volumes:
+    - ./:/var/www
+    networks:
+    - backend
+
+  mysql:
+    container_name: db_mysql_likes
+    image: mysql:5.7
+    ports:
+    - "33069:3306"
+    environment:
+    - "MYSQL_ROOT_PASSWORD=${DB_PASSWORD}"
+    - "MYSQL_DATABASE=${DB_DATABASE}"
+    - "MYSQL_USERNAME=${DB_USERNAME}"
+    - "MYSQL_PASSWORD=${DB_PASSWORD}"
+    volumes:
+    - "./db/mysql/initdb.d:/docker-entrypoint-initdb.d"
+    networks:
+    - backend
+
+networks:
+  backend:
+    driver: bridge
